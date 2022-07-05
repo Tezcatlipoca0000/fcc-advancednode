@@ -54,6 +54,42 @@ myDB(async client => {
       done(null, doc);
     });
   });
+
+  // 6
+  app.route('/login')
+  .post(passport.authenticate('local', {failureRedirect: '/'}), (req, res) => {
+    res.redirect('/profile');
+  });
+
+  // 7
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
+  };
+
+  // 6 & 7 & 8
+  app.route('/profile')
+    .get(ensureAuthenticated, (req, res) => {
+      res.render(__dirname + '/views/pug/profile', {username: req.user.username});
+      // the user object is saved in req.user
+    });
+
+  // 9
+  app.route('/logout')
+    .get((req, res, next) => {
+      req.logout(function(err) {
+        if (err) { return next(err); } 
+        res.redirect('/');
+      });
+    });
+
+  // 9
+  app.use((req, res, next) => {
+    res.status(404)
+      .type('text')
+      .send('Not Found');
+  });
+
 }).catch(e => {
   app.route('/').get((req, res) => {
     res.render(__dirname + '/views/pug/index', {title: e, message: 'Unable to login'});
