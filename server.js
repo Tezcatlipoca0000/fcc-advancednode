@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const myDB = require('./connection');
 const fccTesting = require('./freeCodeCamp/fcctesting.js');
-//const pug = require('pug');
 const session = require('express-session');
 const passport = require('passport');
 const routes = require('./routes.js'); // 12
