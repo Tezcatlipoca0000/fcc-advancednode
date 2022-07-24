@@ -82,6 +82,14 @@ myDB(async client => {
       connected: true,
     });
 
+    // 21
+    socket.on('chat message', (message) => {
+      io.emit('chat message', {
+        name: socket.request.user.name,
+        message
+      });
+    });
+
     // 18
     socket.on('disconnect', () => {
       console.log('user disconnected');
